@@ -1,9 +1,12 @@
 package com.example.user_service;
 
+import com.example.user_service.util.ConstantUtil;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -17,4 +20,8 @@ public class UserServiceApplication {
         SpringApplication.run(UserServiceApplication.class, args);
     }
 
+    @Bean
+    NewTopic logUserSerVice() {
+        return new NewTopic(ConstantUtil.KAFKA_TOPIC_LOG_USER_SERVICE, 2, (short) 1);
+    }
 }
