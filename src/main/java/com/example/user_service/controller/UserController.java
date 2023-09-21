@@ -2,14 +2,20 @@ package com.example.user_service.controller;
 
 import com.example.user_service.model.User;
 import com.example.user_service.repository.UserRepository;
-import com.example.user_service.util.ConstantUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +29,15 @@ public class UserController {
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-    @Autowired
-    KafkaTemplate<String, String> kafkaTemplate;
+    // @Autowired
+    // KafkaTemplate<String, String> kafkaTemplate;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers(@RequestParam(required = false) String name) {
         try {
-//            LOGGER.info("Get list users with keyword: " + name);
-            kafkaTemplate.send(ConstantUtil.KAFKA_TOPIC_LOG_USER_SERVICE, "Get list users with keyword: " + name);
+            LOGGER.info("Get list users with keyword: " + name);
+            // kafkaTemplate.send(ConstantUtil.KAFKA_TOPIC_LOG_USER_SERVICE, "Get list users
+            // with keyword: " + name);
             List<User> listUser = new ArrayList<User>();
 
             if (name == null) {
@@ -41,8 +48,9 @@ public class UserController {
 
             return new ResponseEntity<>(listUser, HttpStatus.OK);
         } catch (Exception e) {
-//            LOGGER.error("Get list users" + e);
-            kafkaTemplate.send(ConstantUtil.KAFKA_TOPIC_LOG_USER_SERVICE, "Get list users" + e);
+            LOGGER.error("Get list users" + e);
+            // kafkaTemplate.send(ConstantUtil.KAFKA_TOPIC_LOG_USER_SERVICE, "Get list
+            // users" + e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
